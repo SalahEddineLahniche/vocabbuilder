@@ -1,3 +1,6 @@
+import core
+
+
 currentLocation = "master"
 dirs = ["study", "game"]
 exitCode = 0
@@ -53,6 +56,7 @@ def exit():
 	global exitCode
 	exitCode = 1
 
+core.i()
 
 while(exitCode == 0):
 	initCmd()
