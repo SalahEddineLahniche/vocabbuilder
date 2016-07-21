@@ -1,18 +1,28 @@
 currentLocation = "master"
 dirs = ["study", "game"]
+exitCode = 0
         
 
 def exc(cmd):
 	global currentLocation
 	cmd = cmd.split(" ")
-	if(cmd[0] == "-b"):
-		if(curr() == "master"):
-			echo("where the hell u wanna go back !")
-		goBack()
-	elif(cmd[0] == "-c"):
+	if(cmd[0] == "-c"):
 		exit()
-	elif(cmd[0] == "cd"):
-		addLevel(cmd[1])
+	if(curr() == "master"):
+		if(cmd[0] == "-b"):
+			echo("where the hell u wanna go back !\n")
+		elif(cmd[0] == "goto"):
+			if(len(cmd) < 2):
+				echo("error: section not recognized\n")
+				return
+			addLevel(cmd[1])
+	if(curr() == "study"):
+		if(cmd[0] == "-b"):
+			goBack()
+	if(curr() == "game"):
+		if(cmd[0] == "-b"):
+			goBack()
+		
 
 def initCmd():
 	global currentLocation
@@ -25,7 +35,6 @@ def echo(string):
 def addLevel(level):
 	global currentLocation
 	currentLocation += " $ " + level
-	initCmd()
 
 def curr():
 	global currentLocation
@@ -36,11 +45,13 @@ def goBack():
 	tmp = currentLocation.split(" $ ")
 	tmp.pop()
 	currentLocation = " $ ".join(tmp)
-	initCmd()
 
 def exit():
-	print("\n\n...exited")
+	global exitCode
+	exitCode = 1
 
 
-initCmd()
+while(exitCode == 0):
+	initCmd()
 
+echo("\nexited with code " + str(exitCode))
