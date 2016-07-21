@@ -1,4 +1,5 @@
 import core
+import core.parser
 
 
 currentLocation = "master"
@@ -50,13 +51,12 @@ def goBack():
 	global currentLocation
 	tmp = currentLocation.split(" $ ")
 	tmp.pop()
-	currentLocation = " $ ".join(tmp)
+	currentLocation = " $ ".join(tmp)
 
 def exit():
 	global exitCode
 	exitCode = 1
 
-core.i()
 
 while(exitCode == 0):
 	initCmd()
