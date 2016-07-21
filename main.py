@@ -6,21 +6,24 @@ exitCode = 0
 def exc(cmd):
 	global currentLocation
 	cmd = cmd.split(" ")
-	if(cmd[0] == "-c"):
+	if(cmd[0] == "exit"):
 		exit()
 	if(curr() == "master"):
-		if(cmd[0] == "-b"):
+		if(cmd[0] == "goback"):
 			echo("where the hell u wanna go back !\n")
 		elif(cmd[0] == "goto"):
 			if(len(cmd) < 2):
 				echo("error: section not recognized\n")
 				return
+			if(cmd[1] not in dirs):
+				echo("error: section not recognized\n")
+				return
 			addLevel(cmd[1])
 	if(curr() == "study"):
-		if(cmd[0] == "-b"):
+		if(cmd[0] == "goback"):
 			goBack()
 	if(curr() == "game"):
-		if(cmd[0] == "-b"):
+		if(cmd[0] == "goback"):
 			goBack()
 		
 
