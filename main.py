@@ -51,7 +51,7 @@ def goBack():
 	global currentLocation
 	tmp = currentLocation.split(" $ ")
 	tmp.pop()
-	currentLocation = " $ ".join(tmp)
+	currentLocation = " $ ".join(tmp)
 
 def exit():
 	global exitCode
