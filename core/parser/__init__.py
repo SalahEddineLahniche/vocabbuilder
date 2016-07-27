@@ -1,12 +1,11 @@
+import os.path
+import os
+
 #takes a file with the format of
 #word;choice1.correct choice2=.choice3
 ##section
 #word;choice1.correct choice2=.choice3
 #and transforme it to a file kind of list id;word
-
-import os.path
-import os
-
 def parse(path, destination):
 	try:
 		# check whether the files exists & init them
@@ -54,6 +53,8 @@ def parse(path, destination):
 		while line != "":
 			g.write(line)
 			line = tmpFile.readline()
+		# update the choices file
+		addChoices(destination, dico, i)
 		# append the new words from the 'path' file
 		for key in dico:
 			g.write(str(i) + ";" + key[1] + "\n")
@@ -71,5 +72,32 @@ def parse(path, destination):
 	except Exception as e:
 		raise e
 	
+# creates the .choices file
+def addChoices(path, lst, i):
+	try:
+		# open the file or create it if it doesn't exists
+		path = path + ".choices"
+		if not os.path.isfile(path):
+				g = open(path, "w")
+				g.close()
+		# open for append
+		g = open(path, "a")
+		# init the starting index
+		j = i
+		# append the choices
+		for el in lst:
+			# write the line this way
+			# idWord ; idChoice1 . idChoice2 . idChoice3 . idChoice4 ; idCorrectAnswer
+			g.write(str(j) + ";" + '.'.join(map(str, range(j + 1, j + 1 + len(el[0])))))
+			for x in range(len(el[0])):
+				if el[0][x][-1] == "=":
+					g.write(";" + str(j + 1 + x))
+					break
+			g.write("\n")
+			j += 1 + len(el[0])
+		# close the file
+		g.close()
+	except Exception as e:
+		raise e
 
-		
+
