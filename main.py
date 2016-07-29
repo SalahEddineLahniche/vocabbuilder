@@ -5,8 +5,8 @@ import core.parser
 currentLocation = "master"
 sections = ["study", "game"]
 globalCmds = ["goto", "exit", "goback", "help"]
-masterCmds = []
-studyCmds = []
+masterCmds = ['add-level', 'show-levels']
+studyCmds = ['start']
 gameCmds = []
 exitCode = 0
         
@@ -24,12 +24,32 @@ def exc(cmd):
 		cmd_help(["all"])
 	elif(cmd[0] == "help"):
 		cmd_help(cmd)
+	elif(curr() == "master"):
+		if(cmd[0] == 'add-level'):
+			cmd_add(cmd)
+		if(cmd[0] == 'show-levels'):
+			cmd_show(cmd)
+
 	else:
 		err(cmd[0], 'nr')
 		cmd_help()
 
 		
 #Commands
+def cmd_add(cmd):
+	global conf
+	if len(cmd) < 2:
+		err("incorrect usage of command add-level")
+		return
+	core.parser.parse(cmd[1], "data/level" + str(len(conf.levels)))
+	print("level has been added successfully")
+	conf.levels += [len(conf.levels)]
+
+def cmd_show(cmd):
+	global conf
+	for i in conf.levels:
+		print('Level {}'.format(str(i)))	
+
 def cmd_goto(cmd):
 	if(len(cmd) < 2):
 		err("'blank'", "nr")
@@ -121,6 +141,9 @@ def err(strErr, errType=""):
 		echo(strErr + "\n\n")
 
 
+
+
+conf = core.config('data/config.dat')
 while(exitCode == 0):
 	initCmd()
 

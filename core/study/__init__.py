@@ -47,7 +47,7 @@ class level(object):
 			self.mastered = []
 			self.needsReview = []
 
-	def Save(self):
+	def save(self):
 		# save progress
 		f = open(path + '.dat', "wb")
 		pickle.dump(self.mastered, f)
