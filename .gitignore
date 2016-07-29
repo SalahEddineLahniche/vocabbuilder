@@ -91,3 +91,6 @@ ENV/
 
 # exc
 exc.cmd
+
+# data
+data/*
