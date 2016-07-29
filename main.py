@@ -82,6 +82,8 @@ def cmd_add(cmd):
 		err("incorrect usage of command add-level")
 		return
 	core.parser.parse(cmd[1], "data/level" + str(len(conf.levels)))
+	if conf.curr == -1:
+		conf.curr = len(conf.levels)
 	print("level has been added successfully")
 	conf.levels += [len(conf.levels)]
 
