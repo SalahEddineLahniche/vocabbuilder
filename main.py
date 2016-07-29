@@ -46,7 +46,7 @@ def exc(cmd):
 def cmd_setLevel(cmd):
 	global conf
 	if len(cmd) < 2:
-		err("incorrect usage of command set-level")
+		err("incorrect usage of command 'set-level', try 'help set-level' for more information")
 		return
 	if int(cmd[1]) in conf.levels:
 		conf.curr = int(cmd[1])
@@ -79,7 +79,7 @@ def cmd_start_study():
 def cmd_add(cmd):
 	global conf
 	if len(cmd) < 2:
-		err("incorrect usage of command add-level")
+		err("incorrect usage of command 'add-level', try 'help add-level' for more inforamtion")
 		return
 	core.parser.parse(cmd[1], "data/level" + str(len(conf.levels)))
 	if conf.curr == -1:
@@ -118,7 +118,7 @@ def cmd_goback(cmd = []):
 
 def cmd_help(cmd = []):
 	if len(cmd) == 0:
-		print("try goto study\nor goto game\nor -h to view all commands")
+		print("try 'goto study'\nor 'goto game'\nor '-h' to view all commands")
 		return
 	elif len(cmd) == 1:
 		if(cmd[0] == "all"):
@@ -141,7 +141,7 @@ def cmd_help(cmd = []):
 					print(cmd)
 				return
 		if cmd[0] == "help":
-			print("specify a command to get help or type -h to show all available commands")
+			print("specify a command to get help or type '-h' to show all available commands")
 	else:
 		if(cmd[1] == "goto"):
 			print("go to a specefic section: study or game")
@@ -151,10 +151,16 @@ def cmd_help(cmd = []):
 			print("exit the app")
 		elif(cmd[1] == "help"):
 			print("get the help for the specific command")
-		elif(cmd[1] == "add-level"):
-			print("in master section, add a specefic level\n\nuse: add-level [path]\npath: a valid dictionary file")
-		elif(cmd[1] == "show-levels"):
-			print("in master section, show existing levels")
+		elif(cmd[1] == "add-level" and curr() == "master"):
+			print("add a specefic level\n\nuse: add-level [path]\npath: a valid dictionary file")
+		elif(cmd[1] == "show-levels"  and curr() == "master"):
+			print("show existing levels")
+		elif(cmd[1] == "set-level"  and curr() == "study"):
+			print("set a level to study\n\nuse: set-level [number]\n \
+				the parameter is the index of level. Type 'show-levels' to view existing levels")
+		else:
+			print("'{}' is not recognized as an internal command, type '-h' to view all commands".format(cmd[1]))
+
 
 
 
