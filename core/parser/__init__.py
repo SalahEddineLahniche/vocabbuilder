@@ -72,6 +72,7 @@ def parse(path, destination):
 	
 # creates the .choices file
 def addChoices(path, lst, i):
+	print(lst)
 	try:
 		# open the file or create it if it doesn't exists
 		path = path + ".choices"
@@ -89,6 +90,10 @@ def addChoices(path, lst, i):
 		# append the choices
 		for el in lst:
 			for x in range(len(el[0])):
+				if el[0][x][-1] == "\n":
+					el[0][x] = el[0][x][:-1]
+				if el[0][x][-1] == "\r":
+					el[0][x] = el[0][x][:-1]
 				if el[0][x][-1] == "=":
 					dico[j] = [list(range(j + 1, j + 1 + len(el[0])))] + [j + 1 + x]
 					break
