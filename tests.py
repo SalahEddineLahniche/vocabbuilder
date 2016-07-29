@@ -7,14 +7,14 @@ import core.parser
 # check wether we can parse the dico file returns 1 if success
 def test1():
 	# remove if dico and choices files already exists
-	if os.path.isfile('dicoN'):
-		os.remove('dicoN')
+	if os.path.isfile('dicoN.words'):
+		os.remove('dicoN.words')
 	if os.path.isfile('dicoN.choices'):
 		os.remove('dicoN.choices')
 
 	# parse the file and print the results of unpickled dicoN
 	core.parser.parse('dico', 'dicoN')
-	f = open('dicoN', 'rb')
+	f = open('dicoN.words', 'rb')
 	i = pickle.load(f)
 	print(i)
 	dico = pickle.load(f)
@@ -41,15 +41,15 @@ def test1():
 # check wether we can parse the dico file and append the results
 def test2():
 	# remove if dico and choices files already exists
-	if os.path.isfile('dicoN'):
-		os.remove('dicoN')
+	if os.path.isfile('dicoN.words'):
+		os.remove('dicoN.words')
 	if os.path.isfile('dicoN.choices'):
 		os.remove('dicoN.choices')
 
 	# parse the file and print the results of unpickled dicoN
 	core.parser.parse('dico', 'dicoN')
 	core.parser.parse('dico', 'dicoN')
-	f = open('dicoN', 'rb')
+	f = open('dicoN.words', 'rb')
 	i = pickle.load(f)
 	print(i)
 	dico = pickle.load(f)
@@ -74,8 +74,8 @@ def test2():
 	return 1
 
 def dispose():
-	if os.path.isfile('dicoN'):
-		os.remove('dicoN')
+	if os.path.isfile('dicoN.words'):
+		os.remove('dicoN.words')
 	if os.path.isfile('dicoN.choices'):
 		os.remove('dicoN.choices')
 
