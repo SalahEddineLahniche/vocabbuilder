@@ -1,12 +1,14 @@
 import core
 import core.parser
+import core.study
+import core.game
 
 
 currentLocation = "master"
-sections = ["study", "game"]
+sections = ["study", "game", "master"]
 globalCmds = ["goto", "exit", "goback", "help"]
 masterCmds = ['add-level', 'show-levels']
-studyCmds = ['start']
+studyCmds = ['start', 'set-level']
 gameCmds = []
 exitCode = 0
         
@@ -29,6 +31,11 @@ def exc(cmd):
 			cmd_add(cmd)
 		if(cmd[0] == 'show-levels'):
 			cmd_show(cmd)
+	elif(curr() == "study"):
+		if(cmd[0] == 'start'):
+			cmd_start_study()
+		if(cmd[0] == 'set-level'):
+			cmd_setLevel(cmd)
 
 	else:
 		err(cmd[0], 'nr')
@@ -36,6 +43,39 @@ def exc(cmd):
 
 		
 #Commands
+def cmd_setLevel(cmd):
+	global conf
+	if len(cmd) < 2:
+		err("incorrect usage of command set-level")
+		return
+	if int(cmd[1]) in conf.levels:
+		conf.curr = int(cmd[1])
+
+def cmd_start_study():
+	global progress, conf
+	progress = core.study.level("data/level" + str(conf.curr))
+	print("choose the right answer or type end to goback to study\n")
+	ans = 'no meaning at all'
+	while ans != "end":
+		w = progress.getWord()
+		core.printWord(w)
+		ans = input("you choose: ")
+		print()
+		if (not ans.isnumeric()) and ans!="":
+			continue
+		if(ans == '' or ans == str(len(w[1][1])) or w[1][1][int(ans)] != w[1][2]):
+			progress.addNeedsReview(w[0])
+			echo("not correct ! it means {} \n".format(w[1][2]))
+		else:
+			progress.addMastered(w[0])
+			echo("correct, {} means {} \n".format(w[1][0], w[1][2]))
+		print("your progress is now {} left, {} mastered, {} needs review".format(
+			str(len(progress.wordsleft)), str(len(progress.mastered)), str(len(progress.needsReview))))
+		print()
+		ans = input("leave blank for next word or type 'end' to goback to study:")
+	
+
+	
 def cmd_add(cmd):
 	global conf
 	if len(cmd) < 2:
@@ -109,6 +149,10 @@ def cmd_help(cmd = []):
 			print("exit the app")
 		elif(cmd[1] == "help"):
 			print("get the help for the specific command")
+		elif(cmd[1] == "add-level"):
+			print("in master section, add a specefic level\n\nuse: add-level [path]\npath: a valid dictionary file")
+		elif(cmd[1] == "show-levels"):
+			print("in master section, show existing levels")
 
 
 
@@ -124,6 +168,8 @@ def echo(string):
 
 def addLevel(level):
 	global currentLocation
+	if curr() == level:
+		return
 	currentLocation += " $ " + level
 
 def curr():
@@ -144,7 +190,9 @@ def err(strErr, errType=""):
 
 
 conf = core.config('data/config.dat')
+progress = None
 while(exitCode == 0):
 	initCmd()
 
+conf.save()
 echo("\nexited with code " + str(exitCode))
