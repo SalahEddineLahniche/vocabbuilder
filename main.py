@@ -29,13 +29,19 @@ def exc(cmd):
 	elif(curr() == "master"):
 		if(cmd[0] == 'add-level'):
 			cmd_add(cmd)
-		if(cmd[0] == 'show-levels'):
+		elif(cmd[0] == 'show-levels'):
 			cmd_show(cmd)
+		else:
+			err(cmd[0], 'nr')
+			cmd_help()
 	elif(curr() == "study"):
 		if(cmd[0] == 'start'):
 			cmd_start_study()
-		if(cmd[0] == 'set-level'):
+		elif(cmd[0] == 'set-level'):
 			cmd_setLevel(cmd)
+		else:
+			err(cmd[0], 'nr')
+			cmd_help()
 
 	else:
 		err(cmd[0], 'nr')
@@ -118,7 +124,7 @@ def cmd_goback(cmd = []):
 
 def cmd_help(cmd = []):
 	if len(cmd) == 0:
-		print("try 'goto study'\nor 'goto game'\nor '-h' to view all commands")
+		print("try '-h' to view all commands")
 		return
 	elif len(cmd) == 1:
 		if(cmd[0] == "all"):
@@ -156,10 +162,10 @@ def cmd_help(cmd = []):
 		elif(cmd[1] == "show-levels"  and curr() == "master"):
 			print("show existing levels")
 		elif(cmd[1] == "set-level"  and curr() == "study"):
-			print("set a level to study\n\nuse: set-level [number]\n \
-				the parameter is the index of level. Type 'show-levels' to view existing levels")
+			print("set a level to study\n\nuse: set-level [number]\nthe parameter is the index of level. goback to master then type 'show-levels' to view existing levels")
 		else:
-			print("'{}' is not recognized as an internal command, type '-h' to view all commands".format(cmd[1]))
+			err(cmd[1], "nr")
+			print("try '-h' to view all commands")
 
 
 
