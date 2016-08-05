@@ -214,10 +214,17 @@ def level_completed():
 		for i in conf.levels:
 			if i > conf.curr:
 				echo('Do you wanna pass to level {} (y|n):'.format(str(i)))
-				ans = input()
-				if ans == 'y':
-					cmd_setLevel(['set-level', str(i)])
-					return
+				while True:
+					ans = input()
+					if ans == 'y':
+						cmd_setLevel(['set-level', str(i)])
+						return
+					elif ans == 'n':
+						break
+					else:
+						err('Expecting y or n')
+						echo('You choose: ')
+				break
 	print('Please use set-level command to choose the level you want')
 
 
