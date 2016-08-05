@@ -206,7 +206,8 @@ def cmd_help(cmd = []):
 		elif(cmd[1] == "show-progress"  and curr() == "study"):
 			print("show current progress for existing levels")
 		elif(cmd[1] == "set-level"  and curr() == "study"):
-			print("set a level to study\n\nuse: set-level [number]\nthe parameter is the index of level. goback to master then type 'show-levels' to view existing levels")
+			print("set a level to study\n\nuse: set-level [number]\nthe parameter is the index of level."
+				" goback to master then type 'show-levels' to view existing levels")
 		else:
 			err(cmd[1], "nr")
 			print("try '-h' to view all commands")
@@ -241,7 +242,7 @@ def initCmd():
 	global currentLocation
 	print("\n", currentLocation, ": ", end='', sep="")
 	if curr() == 'study':
-		echo('<Current: level{}> '.format(str(conf.curr)))
+		echo('<Current level: level{}> '.format(str(conf.curr)))
 	exc(input())
 
 def echo(string):
