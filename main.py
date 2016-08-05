@@ -76,6 +76,7 @@ def cmd_setLevel(cmd):
 
 def cmd_start_study():
 	global progress, conf
+	print('Starting level {}'.format(str(conf.curr)))
 	progress = core.study.level("data/level" + str(conf.curr))
 	if check_completed():
 			echo('this level is already completed, do uyou want to restudy it? (y|n):')
@@ -103,6 +104,7 @@ def cmd_start_study():
 			progress.addMastered(w[0])
 			if check_completed():
 				level_completed()
+				return
 			echo("correct, {} means {} \n".format(w[1][0], w[1][2]))
 		print("your progress is now {} left, {} mastered, {} needs review".format(
 			str(len(progress.wordsleft)), str(len(progress.mastered)), str(len(progress.needsReview))))
@@ -211,7 +213,7 @@ def level_completed():
 	if max(conf.levels) > conf.curr:
 		for i in conf.levels:
 			if i > conf.curr:
-				print('Do you wanna pass to level {} (y|n):')
+				echo('Do you wanna pass to level {} (y|n):'.format(str(i)))
 				ans = input()
 				if ans == 'y':
 					cmd_setLevel(['set-level', str(i)])
