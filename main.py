@@ -104,7 +104,7 @@ def cmd_start_study():
 			progress.addMastered(w[0])
 			if check_completed():
 				level_completed()
-				return
+				break
 			echo("correct, {} means {} \n".format(w[1][0], w[1][2]))
 		print("your progress is now {} left, {} mastered, {} needs review".format(
 			str(len(progress.wordsleft)), str(len(progress.mastered)), str(len(progress.needsReview))))
