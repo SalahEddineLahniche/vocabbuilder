@@ -10,7 +10,7 @@ currentLocation = "master"
 sections = ["study", "game", "master"]
 globalCmds = ["goto", "exit", "goback", "help"]
 masterCmds = ['add-level', 'show-levels']
-studyCmds = ['start', 'set-level', 'show-progress']
+studyCmds = ['start', 'set-level', 'show-progress', 'show-levels']
 gameCmds = []
 exitCode = 0
         
@@ -43,6 +43,8 @@ def exc(cmd):
 			cmd_setLevel(cmd)
 		elif(cmd[0] == 'show-progress'):
 			cmd_show_progress(cmd)
+		elif(cmd[0] == 'show-levels'):
+			cmd_show(cmd)
 		else:
 			err(cmd[0], 'nr')
 			cmd_help()
@@ -75,6 +77,14 @@ def cmd_setLevel(cmd):
 def cmd_start_study():
 	global progress, conf
 	progress = core.study.level("data/level" + str(conf.curr))
+	if check_completed():
+			echo('this level is already completed, do uyou want to restudy it? (y|n):')
+			res = input()
+			if res == 'y':
+				progress.reset()
+			else:
+				print('Please use set-level command to choose the level you want')
+				return
 	print("choose the right answer or type end to goback to study\n")
 	ans = 'no meaning at all'
 	while ans != "end":
@@ -91,6 +101,8 @@ def cmd_start_study():
 			echo("not correct ! it means {} \n".format(w[1][2]))
 		else:
 			progress.addMastered(w[0])
+			if check_completed():
+				level_completed()
 			echo("correct, {} means {} \n".format(w[1][0], w[1][2]))
 		print("your progress is now {} left, {} mastered, {} needs review".format(
 			str(len(progress.wordsleft)), str(len(progress.mastered)), str(len(progress.needsReview))))
@@ -190,7 +202,21 @@ def cmd_help(cmd = []):
 			print("try '-h' to view all commands")
 
 
+def check_completed():
+	return len(progress.mastered) == len(progress.choices)
 
+def level_completed():
+	print('----------------- !! great work !! -----------------')
+	print('level {} is completed'.format(str(conf.curr)))
+	if max(conf.levels) > conf.curr:
+		for i in conf.levels:
+			if i > conf.curr:
+				print('Do you wanna pass to level {} (y|n):')
+				ans = input()
+				if ans == 'y':
+					cmd_setLevel(['set-level', str(i)])
+					return
+	print('Please use set-level command to choose the level you want')
 
 
 
