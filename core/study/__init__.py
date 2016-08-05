@@ -61,6 +61,8 @@ class level(object):
 			self.wordsleft.remove(wordId)
 		if wordId in self.needsReview:
 			self.needsReview.remove(wordId)
+		if wordId in self.mastered:
+			return
 		self.mastered += [wordId]
 
 	def reset(self):
@@ -75,6 +77,8 @@ class level(object):
 			self.wordsleft.remove(wordId)
 		if wordId in self.mastered:
 			self.mastered.remove(wordId)
+		if wordId in self.needsReview:
+			return
 		self.needsReview += [wordId]
 
 
