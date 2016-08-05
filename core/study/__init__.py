@@ -42,14 +42,15 @@ class level(object):
 		self.wordsleft = pickle.load(f)
 		f.close()
 		# check whether the progress in the level is consistent ie every word is either mastered or needsReview or not prompted yet 
-		if len(self.wordsleft) + len(self.mastered) + len(self.needsReview) < len(self.words):
+		if len(self.wordsleft) + len(self.mastered) + len(self.needsReview) < len(self.choices):
 			self.wordsleft = list(self.choices.keys())
 			self.mastered = []
 			self.needsReview = []
+		self.save()
 
 	def save(self):
 		# save progress
-		f = open(path + '.dat', "wb")
+		f = open(self.path + '.dat', "wb")
 		pickle.dump(self.mastered, f)
 		pickle.dump(self.needsReview, f)
 		pickle.dump(self.wordsleft, f)

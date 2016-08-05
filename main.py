@@ -2,6 +2,8 @@ import core
 import core.parser
 import core.study
 import core.game
+import os
+import os.path
 
 
 currentLocation = "master"
@@ -39,6 +41,8 @@ def exc(cmd):
 			cmd_start_study()
 		elif(cmd[0] == 'set-level'):
 			cmd_setLevel(cmd)
+		elif(cmd[0] == 'show-progress'):
+			cmd_show_progress(cmd)
 		else:
 			err(cmd[0], 'nr')
 			cmd_help()
@@ -49,6 +53,17 @@ def exc(cmd):
 
 		
 #Commands
+def cmd_show_progress(cmd):
+	global progress, conf
+	for i in conf.levels:
+		if not os.path.isfile('data/level{}.dat'.format(str(i))):
+			continue
+		tmp = core.study.level('data/level{}'.format(str(i)))
+		print("your progress in level {}: {} left, {} mastered, {} needs review".format(str(i),
+			str(len(tmp.wordsleft)), str(len(tmp.mastered)), str(len(tmp.needsReview))))
+		del tmp
+
+
 def cmd_setLevel(cmd):
 	global conf
 	if len(cmd) < 2:
@@ -68,7 +83,8 @@ def cmd_start_study():
 		ans = input("you choose: ")
 		print()
 		if (not ans.isnumeric()) and ans!="":
-			continue
+			if not ans == 'end':
+				echo('choose the right answer or type end to goback to study\n')
 		if(ans == '' or ans == str(len(w[1][1])) or w[1][1][int(ans)] != w[1][2]):
 			progress.addNeedsReview(w[0])
 			echo("not correct ! it means {} \n".format(w[1][2]))
@@ -79,6 +95,7 @@ def cmd_start_study():
 			str(len(progress.wordsleft)), str(len(progress.mastered)), str(len(progress.needsReview))))
 		print()
 		ans = input("leave blank for next word or type 'end' to goback to study:")
+	progress.save()
 	
 
 	
@@ -92,6 +109,8 @@ def cmd_add(cmd):
 		conf.curr = len(conf.levels)
 	print("level has been added successfully")
 	conf.levels += [len(conf.levels)]
+	tmp = core.study.level("data/level" + str(conf.levels[-1]))
+	del tmp
 
 def cmd_show(cmd):
 	global conf
@@ -175,6 +194,8 @@ def cmd_help(cmd = []):
 def initCmd():
 	global currentLocation
 	print("\n", currentLocation, ": ", end='', sep="")
+	if curr() == 'study':
+		echo('<Current: level{}> '.format(str(conf.curr)))
 	exc(input())
 
 def echo(string):
