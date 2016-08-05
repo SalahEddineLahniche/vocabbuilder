@@ -111,11 +111,12 @@ class level(object):
 					[self.words[i] for i in self.choices[list(self.needsReview)[r]][0]],
 					self.words[self.choices[list(self.needsReview)[r]][1]]])
 			# get a new word
-			r = rnd.randrange(0, len(self.wordsleft))
-			return (self.wordsleft[r],
-				[self.words[self.wordsleft[r]],
-				[self.words[i] for i in self.choices[self.wordsleft[r]][0]],
-				self.words[self.choices[self.wordsleft[r]][1]]])
+			if len(self.wordsleft) > 0:
+				r = rnd.randrange(0, len(self.wordsleft))
+				return (self.wordsleft[r],
+					[self.words[self.wordsleft[r]],
+					[self.words[i] for i in self.choices[self.wordsleft[r]][0]],
+					self.words[self.choices[self.wordsleft[r]][1]]])
 
 
 
