@@ -1,1 +1,2 @@
 #1 when a word mastered is being reviewd it's added again in mastered list: remove duplicates in core.study.level.mastered
+#2 when i type end while the program is waiting for an answerm the program crashed
