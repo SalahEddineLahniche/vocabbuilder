@@ -1,0 +1,1 @@
+#1 when a word mastered is being reviewd it's added again in mastered list: remove duplicates in core.study.level.mastered
