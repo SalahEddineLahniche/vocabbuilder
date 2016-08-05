@@ -84,7 +84,8 @@ def cmd_start_study():
 		print()
 		if (not ans.isnumeric()) and ans!="":
 			if not ans == 'end':
-				echo('choose the right answer or type end to goback to study\n')
+				echo('choose the right answer or type end to goback to study -- PASSING TO NEXT QUESTION\n')
+			continue
 		if(ans == '' or ans == str(len(w[1][1])) or w[1][1][int(ans)] != w[1][2]):
 			progress.addNeedsReview(w[0])
 			echo("not correct ! it means {} \n".format(w[1][2]))
