@@ -10,7 +10,7 @@ currentLocation = "master"
 sections = ["study", "game", "master"]
 globalCmds = ["goto", "exit", "goback", "help"]
 masterCmds = ['add-level', 'show-levels']
-studyCmds = ['start', 'set-level']
+studyCmds = ['start', 'set-level', 'show-progress']
 gameCmds = []
 exitCode = 0
         
@@ -181,6 +181,8 @@ def cmd_help(cmd = []):
 			print("add a specefic level\n\nuse: add-level [path]\npath: a valid dictionary file")
 		elif(cmd[1] == "show-levels"  and curr() == "master"):
 			print("show existing levels")
+		elif(cmd[1] == "show-progress"  and curr() == "study"):
+			print("show current progress for existing levels")
 		elif(cmd[1] == "set-level"  and curr() == "study"):
 			print("set a level to study\n\nuse: set-level [number]\nthe parameter is the index of level. goback to master then type 'show-levels' to view existing levels")
 		else:
