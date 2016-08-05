@@ -1,3 +1,4 @@
 #1 when a word mastered is being reviewd it's added again in mastered list: remove duplicates in core.study.level.mastered
 #2 when i type end while the program is waiting for an answerm the program crashed
 #3 when i have completed the words with 19 mastered & 1 needsReview a bug occured when getting next word
+#4 when u choose not move to next level, progress r not saved
