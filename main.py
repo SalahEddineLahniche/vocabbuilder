@@ -38,7 +38,7 @@ def exc(cmd):
 			cmd_help()
 	elif(curr() == "study"):
 		if(cmd[0] == 'start'):
-			cmd_start_study()
+			cmd_start_study(cmd)
 		elif(cmd[0] == 'set-level'):
 			cmd_setLevel(cmd)
 		elif(cmd[0] == 'show-progress'):
@@ -71,11 +71,19 @@ def cmd_setLevel(cmd):
 	if len(cmd) < 2:
 		err("incorrect usage of command 'set-level', try 'help set-level' for more information")
 		return
+	print('Setting current level to level {}'.format(cmd[1]))
+	if not cmd[1].isnumeric():
+		err('no such level found: {}'.format(cmd[1]))
 	if int(cmd[1]) in conf.levels:
 		conf.curr = int(cmd[1])
+	else:
+		err('no such level found: {}'.format(cmd[1]))
 
-def cmd_start_study():
+
+def cmd_start_study(cmd):
 	global progress, conf
+	if len(cmd) > 1:
+		cmd_setLevel(['set-level', cmd[1]])
 	print('Starting level {}'.format(str(conf.curr)))
 	progress = core.study.level("data/level" + str(conf.curr))
 	if check_completed():
