@@ -72,7 +72,6 @@ def parse(path, destination):
 	
 # creates the .choices file
 def addChoices(path, lst, i):
-	print(lst)
 	try:
 		# open the file or create it if it doesn't exists
 		path = path + ".choices"
