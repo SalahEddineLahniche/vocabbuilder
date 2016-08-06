@@ -10,7 +10,7 @@ currentLocation = "master"
 # available section for goto commands
 sections = ["study", "game", "master"]
 # available commands, each in it's section. for global commands they work in all sections
-globalCmds = ["goto", "exit", "goback", "help"]
+globalCmds = ["goto", "exit", "goback", "help", "cls"]
 masterCmds = ['add-level', 'show-levels']
 studyCmds = ['start', 'set-level', 'show-progress', 'show-levels']
 gameCmds = []
@@ -34,6 +34,8 @@ def exc(cmd):
 		cmd_exit()
 	elif(cmd[0] == "goback"):
 		cmd_goback()
+	elif(cmd[0] == "cls"):
+		cmd_cls()
 	elif(cmd[0] == "goto"):
 		cmd_goto(cmd)
 	elif(cmd[0] == "-h"):
@@ -67,6 +69,9 @@ def exc(cmd):
 
 		
 #Commands
+def cmd_cls():
+	os.system('cls')
+	
 def cmd_show_progress(cmd):
 	'''
 	show the current progress for all levels and !for a specific level!
@@ -407,7 +412,9 @@ def err(strErr, errType=""):
 		echo(strErr + "\n\n")
 
 
-
+# check if data folder exists, if not create it
+if not os.path.isdir('data'):
+	os.mkdir('data')
 # load the config file
 conf = core.config('data/config.dat')
 # initialize the progress variable <core.study.level class>
