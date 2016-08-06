@@ -48,6 +48,12 @@ class level(object):
 			self.needsReview = []
 		self.save()
 
+	def reset(self):
+		self.wordsleft = list(self.choices.keys())
+		self.mastered = []
+		self.needsReview = []
+		self.save()
+
 	def save(self):
 		# save progress
 		f = open(self.path + '.dat', "wb")
