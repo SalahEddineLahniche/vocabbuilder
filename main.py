@@ -70,8 +70,11 @@ def exc(cmd):
 		
 #Commands
 def cmd_cls():
+	'''
+	clear the screen
+	'''
 	os.system('cls')
-	
+
 def cmd_show_progress(cmd):
 	'''
 	show the current progress for all levels and !for a specific level!
@@ -302,6 +305,8 @@ def cmd_help(cmd = []):
 			print("go back to master")
 		elif(cmd[1] == "exit"):
 			print("exit the app")
+		elif(cmd[1] == "cls"):
+			print("clear the screen")
 		elif(cmd[1] == "help"):
 			print("get the help for the specific command")
 		elif(cmd[1] == "add-level" and curr() == "master"):
