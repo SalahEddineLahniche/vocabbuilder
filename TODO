@@ -1,2 +1,4 @@
 #1 add comments to al the main.py !Done!
 #2 add set-levels command to parse one single file into multiple levels
+#3 add handeler when no levels exists
+#4 add clear screen
