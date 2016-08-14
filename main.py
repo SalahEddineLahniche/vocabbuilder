@@ -16,6 +16,8 @@ studyCmds = ['start', 'set-level', 'show-progress', 'show-levels']
 gameCmds = []
 # exit code, if not 0 the program exits the main loop
 exitCode = 0
+
+wordsPath = "data/words.dat"
         
 
 def exc(cmd):
@@ -29,6 +31,9 @@ def exc(cmd):
 	global currentLocation
 	# split the commands for main & sub-commands & eventually flags
 	cmd = cmd.split()
+	if len(cmd) < 1:
+		print()
+		return
 	# select the case and execute the appropriate command.
 	if(cmd[0] == "exit"):
 		cmd_exit()
@@ -86,13 +91,10 @@ def cmd_show_progress(cmd):
 	global progress, conf
 	# itirate over all levels that exists in in the config file
 	for i in conf.levels:
-		# if the file data/level[number].dat doesn't exists it means that the level is never started or corrupted
-		if not os.path.isfile('data/level{}.dat'.format(str(i))):
-			continue
 		# initiate a level class, that loads all variable needed for determening progress
-		tmp = core.study.level('data/level{}'.format(str(i)))
+		tmp = core.level('data/{}'.format(i[0] + '.dat'))
 		# print the progress
-		print("your progress in level {}: {} left, {} mastered, {} needs review".format(str(i),
+		print("your progress in level {}: {} left, {} mastered, {} needs review".format(i[1],
 			str(len(tmp.wordsleft)), str(len(tmp.mastered)), str(len(tmp.needsReview))))
 		# unalocate the memory for the tmp variable
 		del tmp
@@ -108,19 +110,14 @@ def cmd_setLevel(cmd):
 	'''
 	global conf
 	# we need a level number, if not given it's an incorrect usage
-	if len(cmd) < 2:
-		err("incorrect usage of command 'set-level', try 'help set-level' for more information")
-		return
-	print('Setting current level to level {}'.format(cmd[1]))
+	cmd_show(None)
+	i = input('Choose level: ')
+	while not (i.isnumeric() or (i in range(len(conf.levels)))):
+		err('incorrect choice')
+		i = input('Choose level: ')
+	print('Setting current level to level {}'.format(conf.levels[int(i)][1]))
 	# the param should be numeric
-	if not cmd[1].isnumeric():
-		err('no such level found: {}'.format(cmd[1]))
-	# the param should be an existing level number
-	if int(cmd[1]) in conf.levels:
-		conf.curr = int(cmd[1])
-	else:
-		err('no such level found: {}'.format(cmd[1]))
-
+	conf.curr = conf.levels[int(i)]
 
 def cmd_start_study(cmd):
 	'''
@@ -132,14 +129,14 @@ def cmd_start_study(cmd):
 	'''
 	global progress, conf
 	# starting a specific level means setting it first & start it normally
-	if len(cmd) > 1:
-		cmd_setLevel(['set-level', cmd[1]])
-	print('Starting level {}'.format(str(conf.curr)))
+	# if len(cmd) > 1:
+	# 	cmd_setLevel(['set-level', cmd[1]])
+	print('Starting level {}'.format(str(conf.curr[1])))
 	# load the level class of the level
-	progress = core.study.level("data/level" + str(conf.curr))
+	progress = core.level("data/" + str(conf.curr[0]) + '.dat')
 	# check if the level is already mastered & prompt the user for restuding it 
 	if check_completed():
-			echo('this level is already completed, do uyou want to restudy it? (y|n):')
+			echo('this level is already completed, do you want to restudy it? (y|n):')
 			res = input()
 			if res == 'y':
 				progress.reset()
@@ -149,11 +146,12 @@ def cmd_start_study(cmd):
 	print("choose the right answer or type end to goback to study\n")
 	# this ans have no meaning at all just to start the while
 	ans = 'no meaning at all'
+	dico = core.words(wordsPath)
 	while ans != "end":
 		# get a word randomley from the levels database
 		w = progress.getWord()
 		# print the choices nicely 
-		core.printWord(w)
+		core.printWord(w, dico)
 		ans = input("you choose: ")
 		print()
 		# 'blank' means i don't know, a number is expected or end command. if not pass to the next question
@@ -162,15 +160,15 @@ def cmd_start_study(cmd):
 				echo('choose the right answer or type end to goback to study -- PASSING TO NEXT QUESTION\n')
 			continue
 		# check if the answer is correct
-		if(ans == '' or ans == str(len(w[1][1])) or w[1][1][int(ans)] != w[1][2]):
-			progress.addNeedsReview(w[0])
-			echo("not correct ! it means {} \n".format(w[1][2]))
+		if(ans == '' or ans == str(len(w.choicesIds)) or w.choicesIds[int(ans)] != w.correctChoiceId):
+			progress.addNeedsReview(w.wordId)
+			echo("not correct ! it means {} \n".format(dico.dico[w.correctChoiceId]))
 		else:
-			progress.addMastered(w[0])
+			progress.addMastered(w.wordId)
 			if check_completed():
 				level_completed()
 				break
-			echo("correct, {} means {} \n".format(w[1][0], w[1][2]))
+			echo("correct, {} means {} \n".format(dico.dico[w.wordId], dico.dico[w.correctChoiceId]))
 		# print progress
 		print("your progress is now {} left, {} mastered, {} needs review".format(
 			str(len(progress.wordsleft)), str(len(progress.mastered)), str(len(progress.needsReview))))
@@ -196,16 +194,18 @@ def cmd_add(cmd):
 		err("incorrect usage of command 'add-level', try 'help add-level' for more inforamtion")
 		return
 	# add the level to the data folder
-	core.parser.parse(cmd[1], "data/level" + str(len(conf.levels)))
+	lev = core.parse(cmd[1], wordsPath)
+	for el in lev:
+		tmp = core.level('data/' + el[0] + '.dat')
+		print('{} added successfully, file path: {}'.format(el[1], './data/' + el[0] + '.dat'))
+		del tmp
 	# if no level is set as the current level, set this level as the current level
-	if conf.curr == -1:
-		conf.curr = len(conf.levels)
-	print("level has been added successfully")
+	if conf.curr == '' and len(lev) > 0:
+		conf.curr = lev[0]
+	print("level {} has been set as current level".format(conf.curr[1]))
 	# add this level to the config file
-	conf.levels += [len(conf.levels)]
+	conf.levels += lev
 	# initiate the level
-	tmp = core.study.level("data/level" + str(conf.levels[-1]))
-	del tmp
 
 def cmd_show(cmd):
 	'''
@@ -216,8 +216,8 @@ def cmd_show(cmd):
 	no returns
 	'''
 	global conf
-	for i in conf.levels:
-		print('Level {}'.format(str(i)))	
+	for i, lev in enumerate(conf.levels):
+		print('{} - Level: {}, Path: {}'.format(str(i), lev[1], lev[0]))	
 
 def cmd_goto(cmd):
 	'''
@@ -327,7 +327,7 @@ def check_completed():
 	'''
 	check if level is completed
 	'''
-	return len(progress.mastered) == len(progress.choices)
+	return len(progress.mastered) == len(progress.levelChoices.choices)
 
 def level_completed():
 	'''
@@ -367,7 +367,7 @@ def initCmd():
 	global currentLocation
 	print("\n", currentLocation, ": ", end='', sep="")
 	if curr() == 'study':
-		echo('<Current level: level{}> '.format(str(conf.curr)))
+		echo('<Current level: {}> '.format(str(conf.curr[1])))
 	exc(input())
 
 def echo(string):
