@@ -2,5 +2,5 @@
 #2 when i type end while the program is waiting for an answerm the program crashed |fixed|
 #3 when i have completed the words with 19 mastered & 1 needsReview a bug occured when getting next word |fixed|
 #4 when u choose not move to next level, progress r not saved |fixed|
-#5 when data folder doesn't exist program crushed
-#6 when there is no level at all and i want to goto study, program crushed
+#5 when data folder doesn't exist program crushed |fixed|
+#6 when there is no level at all and i want to goto study, program crushed |fixed|
