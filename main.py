@@ -117,20 +117,26 @@ def cmd_setLevel(cmd):
 	'''
 	set the current level, to a level from existing levels
 
-	cmd: the command as list ['set-level', 'level's number']
+	cmd: the command as list ['set-level', level]
 
 	no returns
 	'''
 	global conf
 	# we need a level number, if not given it's an incorrect usage
-	cmd_show(None)
-	i = input('Choose level: ')
-	while not (i.isnumeric() or (i in range(len(conf.levels)))):
-		err('incorrect choice')
+	echo('Setting current level to ')
+	if len(cmd) == 2 and type(cmd[1] == type((0,))):
+		print(cmd[1][1])
+		conf.curr = cmd[1]
+	else:
+		cmd_show(None)
 		i = input('Choose level: ')
-	print('Setting current level to level {}'.format(conf.levels[int(i)][1]))
-	# the param should be numeric
-	conf.curr = conf.levels[int(i)]
+		while not (i.isnumeric() or (i in range(len(conf.levels)))):
+			err('incorrect choice')
+			i = input('Choose level: ')
+		# the param should be numeric
+		conf.curr = conf.levels[int(i)]
+		print(conf.curr[1])
+	print("Set successfully")
 
 def cmd_start_study(cmd):
 	'''
@@ -365,24 +371,27 @@ def level_completed():
 	print('----------------- !! great work !! -----------------')
 	print('level {} is completed'.format(str(conf.curr[1])))
 	# check if there is a level ahead
-	if max(conf.levels) > conf.curr:
-		for i, lev in enumerate(conf.levels):
-			# continue till u find a the current level, in order
-			if lev != conf.curr:
-				continue
-			# prompt the user if he wants to pass to next level, otherwise he needs to choose a level himself
-			echo('Do you wanna pass to level {} (y|n):'.format(lev[1]))
-			while True:
-				ans = input()
-				if ans == 'y':
-					cmd_setLevel(['set-level', str(i)])
-					return
-				elif ans == 'n':
-					break
-				else:
-					err('Expecting y or n')
-					echo('You choose: ')
-			break
+	prompt = False
+	for lev in (conf.levels):
+		# continue till u find a the current level, in order
+		if lev != conf.curr and not prompt:
+			continue
+		if not prompt:
+			prompt = True
+			continue
+		# prompt the user if he wants to pass to next level, otherwise he needs to choose a level himself
+		echo('Do you wanna pass to level {} (y|n):'.format(lev[1]))
+		while True:
+			ans = input()
+			if ans == 'y':
+				cmd_setLevel(['set-level', lev])
+				return
+			elif ans == 'n':
+				break
+			else:
+				err('Expecting y or n')
+				echo('You choose: ')
+		break
 	print('Please use set-level command to choose the level you want')
 
 
