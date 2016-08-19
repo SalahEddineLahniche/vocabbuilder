@@ -3,6 +3,7 @@ import os
 import os.path
 import core.predef
 import crypter
+import textwrap
 
 # a variable that holds the current location whether it's master or master $ study ...etc
 currentLocation = "master"
@@ -404,7 +405,17 @@ def curr():
 	return currentLocation.split(" $ ")[-1]
 
 
-
+def firstMessage():
+	msg = '''\
+	Vocabbuilder - command-line
+	Program that aims building a vocabulary for english learner by a set of commun & must-know words
+	To start, if u have already a dictionary file, in master execute 'add-level [yourfile]' else
+	there is a built-in dictionary ready for u to use.
+	whenever started, type 'goto study', 'set-level', to set a level as current level for studying.
+	Also u can type 'show-progress' in study section to view ur progress in all existing levels.
+	'''
+	msg = textwrap.dedent(msg)
+	print(msg) 
 
 def err(strErr, errType=""):
 	'''
@@ -435,6 +446,7 @@ if len(conf.levels) == 0:
 	f.write(crypter.decrypt(core.predef.BUILT_IN_DICO))
 	f.close()
 
+firstMessage()
 # main loop
 while(exitCode == 0):
 	initCmd()
