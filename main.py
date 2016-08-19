@@ -4,6 +4,7 @@ import os.path
 import core.predef
 import crypter
 import textwrap
+import dicoGenerator
 
 # a variable that holds the current location whether it's master or master $ study ...etc
 currentLocation = "master"
@@ -11,7 +12,7 @@ currentLocation = "master"
 sections = ["study", "game", "master"]
 # available commands, each in it's section. for global commands they work in all sections
 globalCmds = ["goto", "exit", "goback", "help", "cls"]
-masterCmds = ['add-level', 'show-levels']
+masterCmds = ['add-level', 'show-levels', 'dicoGenerator']
 studyCmds = ['start', 'set-level', 'show-progress', 'show-levels']
 gameCmds = []
 # exit code, if not 0 the program exits the main loop
@@ -52,6 +53,8 @@ def exc(cmd):
 			cmd_add(cmd)
 		elif(cmd[0] == 'show-levels'):
 			cmd_show(cmd)
+		elif(cmd[0] == 'dicoGenerator'):
+			cmd_generate(cmd)
 		else:
 			err(cmd[0], 'nr')
 			cmd_help()
@@ -74,6 +77,16 @@ def exc(cmd):
 
 		
 #Commands
+def cmd_generate(cmd):
+	dicoGenerator.init()
+	if len(cmd) == 2:
+		dicoGenerator.filename = cmd[1]
+	if len(cmd) == 3:
+		dicoGenerator.filename = cmd[1]
+		dicoGenerator.append = True if 'True' in cmd[2] else False
+	dicoGenerator.main()
+
+
 def cmd_cls():
 	'''
 	clear the screen
@@ -328,8 +341,10 @@ def cmd_help(cmd = []):
 		elif(cmd[1] == "show-progress"  and curr() == "study"):
 			print("show current progress for existing levels")
 		elif(cmd[1] == "set-level"  and curr() == "study"):
-			print("set a level to study\n\nuse: set-level [number]\nthe parameter is the index of level."
-				" goback to master then type 'show-levels' to view existing levels")
+			print("set a level to study\n\nuse: 'set-level' then '[a number indicating the level u choose]'")
+		elif(cmd[1] == 'dicoGenerator' and curr() == 'master'):
+			print("Creat a dictionary from scratch and save it to a file\n")
+			print("use: dicoGenerator [filename] [True|False]{append or overwrite}")
 		else:
 			err(cmd[1], "nr")
 			print("try '-h' to view all commands")
