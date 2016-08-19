@@ -148,17 +148,29 @@ def cmd_start_study(cmd):
 	ans = 'no meaning at all'
 	dico = core.words(wordsPath)
 	while ans != "end":
+		br = False
 		# get a word randomley from the levels database
 		w = progress.getWord()
 		# print the choices nicely 
 		core.printWord(w, dico)
-		ans = input("you choose: ")
-		print()
-		# 'blank' means i don't know, a number is expected or end command. if not pass to the next question
-		if (not ans.isnumeric()) and ans!="":
-			if not ans == 'end':
-				echo('choose the right answer or type end to goback to study -- PASSING TO NEXT QUESTION\n')
-			continue
+		while True:
+			ans = input("you choose: ")
+			print()
+			# 'blank' means i don't know, a number is expected or end command. if not pass to the next question
+			if (not ans.isnumeric()) and ans!="":
+				if not ans == 'end':
+					err('choose the right answer or type end to goback to study')
+					continue
+				else:
+					br = True
+					break
+			if (int(ans) >= len(w.choicesIds) + 1):
+				err('choose a correct number from 0 to {}'.format(str(len(w.choicesIds))))
+				continue
+			break
+		if br:
+			br = False
+			break
 		# check if the answer is correct
 		if(ans == '' or ans == str(len(w.choicesIds)) or w.choicesIds[int(ans)] != w.correctChoiceId):
 			progress.addNeedsReview(w.wordId)
