@@ -233,7 +233,7 @@ def cmd_add(cmd):
 	# if no level is set as the current level, set this level as the current level
 	if conf.curr == '' and len(lev) > 0:
 		conf.curr = lev[0]
-	print("level {} has been set as current level".format(conf.curr[1]))
+	print("level {} is the current level".format(conf.curr[1]))
 	# add this level to the config file
 	conf.levels += lev
 	# initiate the level
