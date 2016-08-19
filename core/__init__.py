@@ -34,12 +34,21 @@ def printWord(word, dico):
 	print("------------------------------")
 
 
+def randomizeList(lst):
+	length = len(lst)
+	for i in range(length):
+		a = rnd.randint(0, length - 1)
+		b = rnd.randint(0, length - 1)
+		lst[a], lst[b] = lst[b], lst[a]
+	return lst
 
 def parseLine(line, dico):
 	matches = list(regexp.finditer(line))
 	c = choice()
 	c.wordId = dico.getId(matches[0].group(0))
-	for m in matches[1:]:
+	l = list(matches[1:])
+	l = randomizeList(l)
+	for m in l:
 		if m.group(0)[-1] == '=':
 			c.correctChoiceId = dico.getId(m.group(0)[:-1])
 			c.choicesIds += [c.correctChoiceId]
