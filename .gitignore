@@ -97,3 +97,6 @@ data/*
 
 #dicoN file
 dicoN
+
+#tmp_dico
+~$tmp_dico

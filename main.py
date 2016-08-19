@@ -1,9 +1,8 @@
 import core
-import core.parser
-import core.study
-import core.game
 import os
 import os.path
+import core.predef
+import crypter
 
 # a variable that holds the current location whether it's master or master $ study ...etc
 currentLocation = "master"
@@ -82,9 +81,9 @@ def cmd_cls():
 
 def cmd_show_progress(cmd):
 	'''
-	show the current progress for all levels and !for a specific level!
+	show the current progress for all levels
 
-	cmd: the command as a list ['show-progress'] or ['show-progress', '2'] -> for displaying progress of level 2
+	cmd: the command as a list ['show-progress']
 
 	no returns
 	'''
@@ -336,24 +335,26 @@ def level_completed():
 	no returns
 	'''
 	print('----------------- !! great work !! -----------------')
-	print('level {} is completed'.format(str(conf.curr)))
+	print('level {} is completed'.format(str(conf.curr[1])))
 	# check if there is a level ahead
 	if max(conf.levels) > conf.curr:
-		for i in conf.levels:
-			if i > conf.curr:
-				# prompt the user if he wants to pass to next level, otherwise he needs to choose a level himself
-				echo('Do you wanna pass to level {} (y|n):'.format(str(i)))
-				while True:
-					ans = input()
-					if ans == 'y':
-						cmd_setLevel(['set-level', str(i)])
-						return
-					elif ans == 'n':
-						break
-					else:
-						err('Expecting y or n')
-						echo('You choose: ')
-				break
+		for i, lev in enumerate(conf.levels):
+			# continue till u find a the current level, in order
+			if lev != conf.curr:
+				continue
+			# prompt the user if he wants to pass to next level, otherwise he needs to choose a level himself
+			echo('Do you wanna pass to level {} (y|n):'.format(lev[1]))
+			while True:
+				ans = input()
+				if ans == 'y':
+					cmd_setLevel(['set-level', str(i)])
+					return
+				elif ans == 'n':
+					break
+				else:
+					err('Expecting y or n')
+					echo('You choose: ')
+			break
 	print('Please use set-level command to choose the level you want')
 
 
@@ -364,7 +365,11 @@ def initCmd():
 
 	no retruns
 	'''
-	global currentLocation
+	global currentLocation, conf
+	if len(conf.levels) == 0 and curr() == 'study':
+			print('No levels found...!')
+			print('Adding Built in levels')
+			cmd_add(['add', '~$tmp_dico'])
 	print("\n", currentLocation, ": ", end='', sep="")
 	if curr() == 'study':
 		echo('<Current level: {}> '.format(str(conf.curr[1])))
@@ -424,6 +429,11 @@ if not os.path.isdir('data'):
 conf = core.config('data/config.dat')
 # initialize the progress variable <core.study.level class>
 progress = None
+
+if len(conf.levels) == 0:
+	f = open('~$tmp_dico', 'w')
+	f.write(crypter.decrypt(core.predef.BUILT_IN_DICO))
+	f.close()
 
 # main loop
 while(exitCode == 0):
