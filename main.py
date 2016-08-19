@@ -94,8 +94,8 @@ def cmd_show_progress(cmd):
 		# initiate a level class, that loads all variable needed for determening progress
 		tmp = core.level('data/{}'.format(i[0] + '.dat'))
 		# print the progress
-		print("your progress in level {}: {} left, {} mastered, {} needs review".format(i[1],
-			str(len(tmp.wordsleft)), str(len(tmp.mastered)), str(len(tmp.needsReview))))
+		print("your progress in level {}: {} left, {} mastered, Success rate: {}".format(i[1],
+			str(len(tmp.wordsleft)), str(len(tmp.mastered)), tmp.successPercentageString()))
 		# unalocate the memory for the tmp variable
 		del tmp
 

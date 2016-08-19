@@ -223,6 +223,11 @@ class level(object):
 		pickle.dump(self.history, f)
 		f.close()
 
+	def successPercentageString(self):
+		if self.history[1] + self.history[0] == 0:
+			return '- %'
+		return '{} %'.format(round((self.history[0] / (self.history[1] + self.history[0])) * 100, 2))
+
 	def addMastered(self, wordId):
 		# add the word to the mastered set
 		if wordId in self.wordsleft:
