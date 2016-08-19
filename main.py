@@ -11,7 +11,7 @@ currentLocation = "master"
 # available section for goto commands
 sections = ["study", "game", "master"]
 # available commands, each in it's section. for global commands they work in all sections
-globalCmds = ["goto", "exit", "goback", "help", "cls"]
+globalCmds = ["goto", "exit", "goback", "help", "cls", 'version']
 masterCmds = ['add-level', 'show-levels', 'dicoGenerator']
 studyCmds = ['start', 'set-level', 'show-progress', 'show-levels']
 gameCmds = []
@@ -42,6 +42,8 @@ def exc(cmd):
 		cmd_goback()
 	elif(cmd[0] == "cls"):
 		cmd_cls()
+	elif(cmd[0] == "version"):
+		cmd_version()
 	elif(cmd[0] == "goto"):
 		cmd_goto(cmd)
 	elif(cmd[0] == "-h"):
@@ -86,6 +88,9 @@ def cmd_generate(cmd):
 		dicoGenerator.append = True if 'True' in cmd[2] else False
 	dicoGenerator.main()
 
+def cmd_version():
+	echo('Vocabbuilder ')
+	echo(core.predef.CORE_VERSION())
 
 def cmd_cls():
 	'''
@@ -338,6 +343,8 @@ def cmd_help(cmd = []):
 			print("exit the app")
 		elif(cmd[1] == "cls"):
 			print("clear the screen")
+		elif(cmd[1] == 'version'):
+			print("get program version")
 		elif(cmd[1] == "help"):
 			print("get the help for the specific command")
 		elif(cmd[1] == "add-level" and curr() == "master"):
