@@ -47,7 +47,7 @@ def main():
 
 	print('Please specify a level\'s name !')
 	ans = 'level ' + input('<=> level ')
-	f = open('dicoN', 'a' if append else 'w')
+	f = open(filename, 'a' if append else 'w')
 	f.write(getStr(ans.split()))
 	ans = input('<=> ')
 	while ans != 'end':
