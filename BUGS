@@ -4,3 +4,4 @@
 #4 when u choose not move to next level, progress r not saved |fixed|
 #5 when data folder doesn't exist program crushed |fixed|
 #6 when there is no level at all and i want to goto study, program crushed |fixed|
+#7 when there is already a level set as current level, don't set one
