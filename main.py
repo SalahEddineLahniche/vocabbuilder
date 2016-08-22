@@ -84,7 +84,7 @@ def cmd_show_progress(cmd):
 
 def cmd_setLevel(cmd):
 	global conf
-	echo('Setting current level to ')
+	echo('Setting current level to:\n')
 	if len(cmd) == 2 and type(cmd[1] == type((0,))):
 		print(cmd[1][1])
 		conf.curr = cmd[1]
@@ -150,7 +150,6 @@ def cmd_start_study(cmd):
 		print()
 		ans = input("leave blank for next word or type 'end' to goback to study:")
 	progress.save()
-	os.system("cls")
 
 	
 def cmd_add(cmd):
