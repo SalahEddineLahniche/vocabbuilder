@@ -228,26 +228,29 @@ class level(object):
 			return '- %'
 		return '{} %'.format(round((self.history[0] / (self.history[1] + self.history[0])) * 100, 2))
 
+	def percentage(self):
+		return len(self.mastered) / (len(self.mastered) + len(self.needsReview) + len(self.wordsleft))
+
 	def addMastered(self, wordId):
 		# add the word to the mastered set
+		self.history = (self.history[0] + 1, self.history[1])
 		if wordId in self.wordsleft:
 			self.wordsleft.remove(wordId)
 		if wordId in self.needsReview:
 			self.needsReview.remove(wordId)
 		if wordId in self.mastered:
 			return
-		self.history = (self.history[0] + 1, self.history[1])
 		self.mastered += [wordId]
 
 	def addNeedsReview(self, wordId):
 		# add the word to the needs review set
+		self.history = (self.history[0], self.history[1] + 1)
 		if wordId in self.wordsleft:
 			self.wordsleft.remove(wordId)
 		if wordId in self.mastered:
 			self.mastered.remove(wordId)
 		if wordId in self.needsReview:
 			return
-		self.history = (self.history[0], self.history[1] + 1)
 		self.needsReview += [wordId]
 
 

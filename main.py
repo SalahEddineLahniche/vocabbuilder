@@ -2,6 +2,7 @@ import core
 import os
 import os.path
 import core.predef
+import core.progress
 import crypter
 import textwrap
 import dicoGenerator
@@ -79,6 +80,9 @@ def cmd_show_progress(cmd):
 		tmp = core.level('data/{}'.format(i[0] + '.dat'))
 		print("your progress in level {}: {} left, {} mastered, Success rate: {}".format(i[1],
 			str(len(tmp.wordsleft)), str(len(tmp.mastered)), tmp.successPercentageString()))
+		echo("[*]\t")
+		core.progress.progress_echo(tmp.percentage())
+		print()
 		del tmp
 
 
