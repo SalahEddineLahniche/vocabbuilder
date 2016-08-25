@@ -1,6 +1,8 @@
 import os
 import os.path
 import random as rnd
+import core
+import textwrap
 
 filename = 'dicoN'
 append = False
@@ -37,6 +39,28 @@ def evaluate(cmd):
 		string = string[:-1]
 	if cmd[0] == 'level':
 		string += '#{}'.format(cmd[1].replace('_', ' '))
+	if cmd[0] == 'view':
+		g = open(filename, "r")
+		line = g.readline()
+		level = ""
+		print("[*] Begining\n")
+		while line:
+			line = line.rstrip()
+			if line[0] == "#":
+				level = line[1:]
+				w = None
+			else:
+				w = core.parseLineString(line)
+			if level and w:
+				print(textwrap.dedent("""\
+					 [level %s] - '%s' means '%s'
+					 -> Choices %s\
+					 """ % (level, w.wordId, w.correctChoiceId, ", ".join("'" + w.choicesIds + "'"))))
+			line = g.readline()
+		g.close()
+		print("\n[*] End")
+		return None
+
 	string += '\n'
 	return string
 
@@ -94,6 +118,7 @@ def main():
 	print('Dico Generator, file name = {}, append = {}\n\n'.format(filename, append))
 	print('Usage: add [word] [synonym] [choice1] [choice2] ...')
 	print('Usage: level [newLevelName]')
+	print('Usage: \'view\' to view current status')
 	print('replace [choice] by $ if u want to go through the dictionary for a convenient choice')
 	print('replace [choice] by # if u want to choose randomly a word from the dico')
 	print('replace a space in words by \'_\'\n')
@@ -119,8 +144,11 @@ def main():
 	ans = input('<=> ')
 	while ans != 'end':
 		cmd = ans.split()
-		f.write(evaluate(cmd))
-		ans = input('<=> ')
+		e = evaluate(cmd)
+		if e:
+			f.write(e)
+			f.flush()
+		ans = input('\n<=> ')
 
 	f.close()
 

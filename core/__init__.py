@@ -76,6 +76,20 @@ def parseLine(line, dico):
 		c.choicesIds += [dico.getId(m.group(0))]
 	return c
 
+def parseLineString(line):
+	matches = list(regexp.finditer(line))
+	c = choice()
+	c.wordId = matches[0].group(0)
+	l = list(matches[1:])
+	l = randomizeList(l)
+	for m in l:
+		if m.group(0)[-1] == '=':
+			c.correctChoiceId = m.group(0)[:-1]
+			c.choicesIds += [c.correctChoiceId]
+			continue
+		c.choicesIds += [m.group(0)]
+	return c
+
 def parse(path, wordsDicoPath):
 	dico = words(wordsDicoPath)
 	if not os.path.isfile(path):
