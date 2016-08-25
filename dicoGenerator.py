@@ -6,7 +6,7 @@ filename = 'dicoN'
 append = False
 words = None
 
-def getStr(cmd):
+def evaluate(cmd):
 	string = ''
 	if cmd[0] == 'add':
 		string += cmd[1].replace('_', ' ')
@@ -115,11 +115,11 @@ def main():
 	if not append:
 		print('Please specify a level\'s name !')
 		ans = 'level ' + input('<=> level ')
-		f.write(getStr(ans.split()))
+		f.write(evaluate(ans.split()))
 	ans = input('<=> ')
 	while ans != 'end':
 		cmd = ans.split()
-		f.write(getStr(cmd))
+		f.write(evaluate(cmd))
 		ans = input('<=> ')
 
 	f.close()
