@@ -24,15 +24,35 @@ def rndStr(length):
 		s += tmp[r]
 	return s
 
+def padAndCenter(string, length):
+	if len(string) > length:
+		return string
+	halfLength = length - len(string)
+	halfLength = halfLength / 2
+	halfLength = int(halfLength)
+	string = " " * halfLength + string + " " * halfLength
+	return (len(string), string)
+
+def padr(string, length):
+	if len(string) > length:
+		return string
+	return string + " " * (length - len(string))
+
 def printWord(word, dico):
-	print("-----------{} means-----------".format(dico.dico[word.wordId]))
+	length = 32
+	length, fline = padAndCenter(dico.dico[word.wordId] + " means", length)
+	sep = "-" * (length + 2)
+	fline = "|" + fline + "|"
+	print(sep)
+	print(fline)
 	j = 0
 	for i, choice in enumerate(word.choicesIds):
-		print("{} - {}".format(i, dico.dico[choice]))
+		print(sep)
+		print("|" + padr(" {} - {}".format(i, dico.dico[choice]), length) + "|")
 		j = i
-	print("{} - {}".format(j + 1, "I don't know"))
-	print("------------------------------")
-
+	print(sep)
+	print("|" + padr(" {} - {}".format(j + 1, "I don't know"), length) + "|")
+	print(sep)
 
 def randomizeList(lst):
 	length = len(lst)
