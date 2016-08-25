@@ -44,8 +44,8 @@ def main():
 				print("overwrite ? (y|n)", end="")
 				continue
 			break
-
-	print('Please specify a level\'s name !')
+	if not append:
+		print('Please specify a level\'s name !')
 	ans = 'level ' + input('<=> level ')
 	f = open(filename, 'a' if append else 'w')
 	f.write(getStr(ans.split()))
