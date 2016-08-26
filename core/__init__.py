@@ -91,6 +91,8 @@ def parseLineString(line):
 	return c
 
 def parse(path, wordsDicoPath):
+	print("[*] Parsing %s" % path)
+	print("[*] Opening dictionary file %s" % wordsDicoPath)
 	dico = words(wordsDicoPath)
 	if not os.path.isfile(path):
 			raise Exception('{} -- path doesn\'t exist'.format(path))
@@ -98,10 +100,13 @@ def parse(path, wordsDicoPath):
 	levelName = 'not specified'
 	levelFileName = rndStr(10)
 	counter = 0
+	i = 1
 	levels = [(levelFileName, levelName)]
 	l = f.readline()
 	tmpChoices = levelChoices('data/' + levelFileName + '.dat')
 	while l:
+		print("[*] Line %d" % i, end="\r")
+		i += 1
 		if l[-1] == '\n':
 			l = l[:-1]
 		if l[0] == '#':
@@ -119,8 +124,11 @@ def parse(path, wordsDicoPath):
 			tmpChoices.choices[c.wordId] = c
 			counter += 1
 		l = f.readline()
+	print()
+	print("[*] Saving Files")
 	tmpChoices.save()
 	dico.save()
+	print("[*] Parsing Finished Successfully\n")
 	return levels
 
 class config():
