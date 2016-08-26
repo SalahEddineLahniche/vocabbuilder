@@ -61,6 +61,7 @@ def exc(cmd):
 	else:
 		err(cmd[0], 'nr')
 		cmd_help()
+		
 def cmd_generate(cmd):
 	dicoGenerator.init()
 	if len(cmd) == 2:
@@ -68,6 +69,7 @@ def cmd_generate(cmd):
 	if len(cmd) == 3:
 		dicoGenerator.filename = cmd[1]
 		dicoGenerator.append = True if 'True' in cmd[2] else False
+	dicoGenerator.words = core.words(wordsPath)
 	dicoGenerator.main()
 
 
