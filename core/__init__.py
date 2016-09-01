@@ -39,7 +39,7 @@ def padr(string, length):
 	return string + " " * (length - len(string))
 
 def printWord(word, dico):
-	length = 32
+	length = 50
 	length, fline = padAndCenter(dico.dico[word.wordId] + " means", length)
 	sep = "-" * (length + 2)
 	fline = "|" + fline + "|"
