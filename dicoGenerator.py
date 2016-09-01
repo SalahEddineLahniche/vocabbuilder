@@ -37,29 +37,33 @@ def evaluate(cmd):
 			string += '.'
 			j += 1
 		string = string[:-1]
-	if cmd[0] == 'level':
+	elif cmd[0] == 'level':
 		string += '#{}'.format(cmd[1].replace('_', ' '))
-	if cmd[0] == 'view':
+	elif cmd[0] == 'view':
 		g = open(filename, "r")
 		line = g.readline()
 		level = ""
 		print("[*] Begining\n")
 		while line:
 			line = line.rstrip()
-			if line[0] == "#":
-				level = line[1:]
-				w = None
-			else:
-				w = core.parseLineString(line)
-			if level and w:
-				print(textwrap.dedent("""\
-					 [level %s] - '%s' means '%s'
-					 -> Choices %s\
-					 """ % (level, w.wordId, w.correctChoiceId, ", ".join("'" + w.choicesIds + "'"))))
-			line = g.readline()
+			if line:
+				if line[0] == "#":
+					level = line[1:]
+					w = None
+				else:
+					w = core.parseLineString(line)
+				if level and w:
+					print(textwrap.dedent("""\
+						 [level %s] - '%s' means '%s'
+						 -> Choices %s
+						 """ % (level, w.wordId, w.correctChoiceId, ", ".join(w.choicesIds))))
+				line = g.readline()
 		g.close()
 		print("\n[*] End")
 		return None
+	else:
+		return None
+
 
 	string += '\n'
 	return string
